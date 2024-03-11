@@ -19,14 +19,6 @@ struct Client {
     int currentMonth = ltm->tm_mon + 1;
     int currentYear = ltm->tm_year + 1900;
     
-    void calcAge() {
-        age = currentYear - dateOfBirth.year;
-        
-        if (currentMonth - dateOfBirth.month < 0 || currentMonth - dateOfBirth.month == 0 && currentDay - dateOfBirth.day < 0) {
-            age -= 1;
-        }
-    }
-    
     void readClient() {
         printf("Digite o nome do cliente: ");
         scanf("%[^\n]%*c", name);
@@ -61,7 +53,7 @@ struct Client {
             printf("Informe o ano de nascimento do cliente: ");
             scanf("%d", &dateOfBirth.year);
         
-            while (dateOfBirth.year < 1900 || dateOfBirth.year > 2024) {
+            while (dateOfBirth.year < 1900 || dateOfBirth.year > currentYear) {
                 printf("O ano informado e invalido. Digite novamente: ");
                 scanf("%d", &dateOfBirth.year);
             };
@@ -76,7 +68,11 @@ struct Client {
         
         printf("\n");
         
-        calcAge();
+        age = currentYear - dateOfBirth.year;
+        
+        if (currentMonth - dateOfBirth.month < 0 || currentMonth - dateOfBirth.month == 0 && currentDay - dateOfBirth.day < 0) {
+            age -= 1;
+        }
         
         printf("Cliente cadastrado: \n");
         printf("Nome: %s\n", name);
