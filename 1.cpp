@@ -1,8 +1,5 @@
 #include <stdio.h>
-
-#define currentYear 2024
-#define currentMonth 3
-#define currentDay 8
+#include<ctime>
 
 struct DateOfBirth {
     int day;
@@ -16,13 +13,17 @@ struct Client {
     int age;
     DateOfBirth dateOfBirth;
     
+    time_t date = time(0);
+    tm *ltm = localtime(&date);
+    int currentDay = ltm->tm_mday;
+    int currentMonth = ltm->tm_mon + 1;
+    int currentYear = ltm->tm_year + 1900;
+    
     void calcAge() {
-        if (currentYear == dateOfBirth.year || 
-            currentYear - dateOfBirth.year == 1 && currentMonth < dateOfBirth.month || 
-            currentYear - dateOfBirth.year == 1 && currentMonth == dateOfBirth.month && currentDay > dateOfBirth.day) {
-                age = 0;
-        } else {
-           
+        age = currentYear - dateOfBirth.year;
+        
+        if (currentMonth - dateOfBirth.month < 0 || currentMonth - dateOfBirth.month == 0 && currentDay - dateOfBirth.day < 0) {
+            age -= 1;
         }
     }
     

@@ -1,14 +1,8 @@
 #include<stdio.h>
 
 struct Worker {
-    char name[51];
-    char role[51];
-    double baseSalary;
-    double benefits[50];
-    double discounts[50];
-    double netSalary; //tirar ?
-    int amountOfBenefits; //tirar ?
-    int amountOfDiscounts; //tirar ?
+    char name[51], role[51];
+    double baseSalary, benefits, discounts, netSalary;
     
     void registerWorker() {
         printf("Digite o nome do funcionario: ");
@@ -20,29 +14,17 @@ struct Worker {
         printf("Digite o salario base do funcionario: ");
         scanf("%lf", &baseSalary);
         
-        netSalary = baseSalary;
+        printf("Digite o valor de beneficios do funcionario: ");
+        scanf("%lf", &benefits);
         
-        printf("Quantos beneficios o funcionario possui? ");
-        scanf("%d", &amountOfBenefits);
+        printf("Digite o valor de descontos do descontos: ");
+        scanf("%lf", &discounts);
         
-        for (int i = 0; i < amountOfBenefits; i++) {
-            printf("Digite o valor do benefício (%d/%d): ", i + 1, amountOfBenefits);
-            scanf("%lf", &benefits[i]);
-            netSalary += benefits[i];
-        }
-        
-        printf("Quantos descontos o funcionario possui? ");
-        scanf("%d", &amountOfDiscounts);
-        
-        for (int i = 0; i < amountOfDiscounts; i++) {
-            printf("Digite o valor do desconto (%d/%d): ", i + 1, amountOfDiscounts);
-            scanf("%lf", &discounts[i]);
-            netSalary -= discounts[i];
-        }
-    
         printf("\n");
         
-        printf("Funcionario cadastrado: \n");
+        netSalary = baseSalary + benefits - discounts;
+        
+        printf("Funcionario cadastrado: \n\n");
         showWorker();
     }
     
@@ -50,29 +32,8 @@ struct Worker {
         printf("Nome: %s\n", name);
         printf("Cargo: %s\n", role);
         printf("Salario base: R$%.2lf\n", baseSalary);
-        printf("Beneficios: ");
-        
-        if (amountOfBenefits == 0) {
-            printf("nenhum");
-        } else {
-            for (int i = 0; i < amountOfBenefits; i++) {
-                printf("R$%.2lf ", benefits[i]);
-            }
-        }
-        
-        printf("\n");
-        
-        printf("Descontos: ");
-        if (amountOfDiscounts == 0) {
-            printf("nenhum");
-        } else {
-            for (int i = 0; i < amountOfDiscounts; i++) {
-                printf("R$%.2lf ", discounts[i]);
-            }
-        }
-        
-        printf("\n");
-        
+        printf("Beneficios: R$%.2lf\n", benefits);
+        printf("Descontos: R$%.2lf\n", discounts);
         printf("Salario liquido: R$%.2lf\n\n", netSalary);
     }
 };
@@ -87,6 +48,7 @@ struct Store {
             printf("Nao e possivel cadastrar mais funcionarios.\n\n");
         } else {
             workers[amountOfWorkers].registerWorker();
+            
             if (workers[amountOfWorkers].netSalary > highestPaidWorker.netSalary) {
                 highestPaidWorker = workers[amountOfWorkers];
             }
@@ -137,7 +99,7 @@ int main() {
     
     do {
         printf("O que deseja fazer?\n");
-        printf("1. Cadastrar funcionarios\n");
+        printf("1. Cadastrar funcionarios (ainda pode cadastrar %d funcionarios)\n", 10 - store.amountOfWorkers);
         printf("2. Exibir funcionarios cadastrados\n");
         printf("3. Exibir media salarial da loja\n");
         printf("4. Mostrar o funcionario com o maior salario\n");
