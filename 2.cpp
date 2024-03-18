@@ -17,7 +17,7 @@ struct Worker {
         printf("Digite o valor de beneficios do funcionario: ");
         scanf("%lf", &benefits);
         
-        printf("Digite o valor de descontos do descontos: ");
+        printf("Digite o valor de descontos do funcionario: ");
         scanf("%lf", &discounts);
         
         printf("\n");
