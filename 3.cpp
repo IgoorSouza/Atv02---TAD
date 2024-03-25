@@ -17,6 +17,25 @@ struct Group {
         for (int i = 0; i < length; i++) {
             printf("Digite um numero (%d/%d): ", i + 1, length);
             scanf("%d", &numbers[i]);
+            
+            bool isRepeated = false;
+            
+            for (int j = 0; j < i; j++) {
+                if (numbers[j] == numbers[i]) isRepeated = true;
+               
+                while (isRepeated) {
+                    printf("Este numero ja esta no conjunto. Digite outro: ");
+                    scanf("%d", &numbers[i]);
+                    
+                    bool isRepeatedAgain = false;
+                    
+                    for (int k = 0; k < i; k++) {
+                        if (numbers[k] == numbers[i]) isRepeatedAgain = true;
+                    }
+                    
+                    if (!isRepeatedAgain) isRepeated = false;
+               }
+           }
         }
         
         printf("\n");
@@ -107,6 +126,9 @@ struct AllGroups {
             Group firstGroup = groups[firstGroupIndex - 1];
             Group secondGroup = groups[secondGroupIndex - 1];
             
+            Group newGroup;
+            int counter = 0;
+            
             if (firstGroup.length == 0 && secondGroup.length == 0) {
                 groups[amountOfGroups] = firstGroup;
             } else if (firstGroup.length == 0) {
@@ -115,8 +137,9 @@ struct AllGroups {
                 groups[amountOfGroups] = firstGroup;
             } else {
                 for (int i = 0; i < firstGroup.length; i++) {
-                    groups[amountOfGroups].numbers[groups[amountOfGroups].length] = firstGroup.numbers[i];
-                    groups[amountOfGroups].length++;
+                    newGroup.numbers[newGroup.length] = firstGroup.numbers[i];
+                    newGroup.length++;
+                    counter++;
                 }
                 
                 for (int i = 0; i < secondGroup.length; i++) {
@@ -129,15 +152,22 @@ struct AllGroups {
                     }
                             
                     if (!isRepeated) {
-                        groups[amountOfGroups].numbers[groups[amountOfGroups].length] = secondGroup.numbers[i];
-                        groups[amountOfGroups].length++;
+                        newGroup.numbers[newGroup.length] = secondGroup.numbers[i];
+                        newGroup.length++;
+                        counter++;
                     }
                 }
+                
+                groups[amountOfGroups] = newGroup;
             }
             
-            printf("Novo conjunto criado:\n\n");
-            groups[amountOfGroups].showGroup();
-            amountOfGroups++;
+            if (counter > 20) {
+                printf("Nao foi possivel realizar a uniao: conjunto resultante possui mais de 20 numeros\n\n");
+            } else {
+                printf("Novo conjunto criado:\n\n");
+                groups[amountOfGroups].showGroup();
+                amountOfGroups++; 
+            }
         }
     }
     
@@ -168,6 +198,7 @@ struct AllGroups {
             printf("\n");
             
             printf("Quais conjuntos deseja interseccionar?\n\n");
+            
             int firstGroupIndex, secondGroupIndex;
             
             printf("Primeiro conjunto: ");
@@ -194,26 +225,15 @@ struct AllGroups {
             Group firstGroup = groups[firstGroupIndex - 1];
             Group secondGroup = groups[secondGroupIndex - 1];
             
-            if (firstGroup.length == 0 || secondGroup.length == 0) {
-                groups[amountOfGroups] = firstGroup;
-            } else {
+            if (!(firstGroup.length == 0 || secondGroup.length == 0)) {
                 for (int i = 0; i < firstGroup.length; i++) {
                     for (int j = 0; j < secondGroup.length; j++) {
                         if (firstGroup.numbers[i] == secondGroup.numbers[j]) {
-                            bool isRepeated = false;
-                            for (int k = 0; k < groups[amountOfGroups].length; k++) {
-                                if (firstGroup.numbers[i] == groups[amountOfGroups].numbers[k]) {
-                                    isRepeated = true;
-                                }
-                            }
-                            
-                            if (!isRepeated) {
-                             groups[amountOfGroups].numbers[groups[amountOfGroups].length] = firstGroup.numbers[i];
-                                groups[amountOfGroups].length++;
-                            }
+                            groups[amountOfGroups].numbers[groups[amountOfGroups].length] = firstGroup.numbers[i];
+                            groups[amountOfGroups].length++;
                         }
                     }
-                }
+                } 
             }
             
             printf("Novo conjunto criado:\n\n");
